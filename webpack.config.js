@@ -3,8 +3,9 @@ var path = require("path");
 var DEV = path.resolve(__dirname, "dev");
 var BUILD = path.resolve(__dirname, "build")
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var debug = true;
+var debug = process.argv[1].indexOf('webpack-dev-server') !== -1;
 var styles = debug ? 'style!css?sourceMap!sass?sourceMap' : ExtractTextPlugin.extract("style-loader","css-loader!sass-loader")
+var babelPresets = debug ? [ 'es2015', 'react', 'react-hmre' ] : [ 'es2015', 'react' ]
 
 var exports = {
   entry: DEV,
@@ -20,7 +21,7 @@ var exports = {
       loader: "babel",
       include: DEV,
       query: {
-        presets: [ 'es2015', 'react', 'react-hmre' ]
+        presets: babelPresets
       }
     },
     {
